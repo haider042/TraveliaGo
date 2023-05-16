@@ -1,0 +1,51 @@
+﻿@page "/trips"
+@using Tavelia_Go.Shared
+@inject HttpClient Http
+
+<PageTitle>Trip List</PageTitle>
+
+<h1>Trips List</h1>
+
+<button @onclick="GetTrips">Get Trip Data</button>
+
+<p>Here we've a list of all trips</p>
+
+@if (trip == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Destination Name</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var trips in trip)
+            {
+                <tr>
+                    <td>@trips.id</td>
+                    <td>@trips.destination</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Trips[]? trip;
+
+    private async void GetTrips() {
+       trip=await Http.GetFromJsonAsync<Trip[]>("trip/TripsList");
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+       // trip = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+    }
+}
